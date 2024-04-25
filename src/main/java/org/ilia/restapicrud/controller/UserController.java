@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.ilia.restapicrud.dto.BirthDateRange;
 import org.ilia.restapicrud.dto.UserDto;
 import org.ilia.restapicrud.service.UserService;
+import org.ilia.restapicrud.validation.ValidateObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,6 +21,7 @@ import static org.ilia.restapicrud.enums.UpdateType.PARTIAL_UPDATE;
 public class UserController {
 
     private final UserService userService;
+    private final ValidateObject validateObject;
 
     @GetMapping
     public List<UserDto> findAll() {
@@ -28,7 +29,8 @@ public class UserController {
     }
 
     @GetMapping("/birthDateRange")
-    public List<UserDto> findByBirthDateRange(@Validated BirthDateRange birthDateRange) {
+    public List<UserDto> findByBirthDateRange(BirthDateRange birthDateRange) {
+        validateObject.validate(birthDateRange);
         return userService.findByBirthDateRange(birthDateRange);
     }
 
@@ -40,12 +42,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody @Validated UserDto userDto) {
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        validateObject.validate(userDto);
         return userService.create(userDto);
     }
 
     @PutMapping("/{id}")
-    public UserDto fullUpdate(@PathVariable Integer id, @RequestBody @Validated UserDto userDto) {
+    public UserDto fullUpdate(@PathVariable Integer id, @RequestBody UserDto userDto) {
+        validateObject.validate(userDto);
         return userService.update(id, userDto, FULL_UPDATE)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }

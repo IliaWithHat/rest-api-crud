@@ -16,18 +16,18 @@ public class UserDto {
 
     Integer id;
 
-    @NotNull
-    @Email
+    @NotNull(message = "Enter email")
+    @Email(message = "Enter correct email")
     String email;
 
-    @NotBlank
+    @NotBlank(message = "Enter first name")
     String firstName;
 
-    @NotBlank
+    @NotBlank(message = "Enter last name")
     String lastName;
 
-    @NotNull
-    @Past
+    @NotNull(message = "Enter birth date")
+    @Past(message = "Birth date cannot be past")
     @MinimumAge
     LocalDate birthDate;
 
