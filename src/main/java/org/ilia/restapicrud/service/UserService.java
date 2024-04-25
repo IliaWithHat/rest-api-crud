@@ -7,6 +7,7 @@ import org.ilia.restapicrud.entity.User;
 import org.ilia.restapicrud.enums.UpdateType;
 import org.ilia.restapicrud.mapper.UserMapper;
 import org.ilia.restapicrud.repository.UserRepository;
+import org.ilia.restapicrud.validation.ValidateObject;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ValidateObject validateObject;
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
@@ -48,11 +50,19 @@ public class UserService {
 
     public Optional<UserDto> update(Integer id, UserDto userDto, UpdateType updateType) {
         return userRepository.findById(id)
-                .map(user -> updateType == FULL_UPDATE
-                        ? userMapper.copyUserDtoToUser(userDto, user)
-                        : userMapper.copyUserDtoToUserIgnoreNull(userDto, user))
+                .map(user -> mergeUserDtoAndUser(userDto, user, updateType))
                 .map(userRepository::save)
                 .map(userMapper::toUserDto);
+    }
+
+    private User mergeUserDtoAndUser(UserDto userDto, User user, UpdateType updateType) {
+        if (updateType == FULL_UPDATE) {
+            return userMapper.copyUserDtoToUser(userDto, user);
+        } else {
+            User userForUpdate = userMapper.copyUserDtoToUserIgnoreNull(userDto, user);
+            validateObject.validate(userMapper.toUserDto(userForUpdate));
+            return userForUpdate;
+        }
     }
 
     public boolean delete(Integer id) {
