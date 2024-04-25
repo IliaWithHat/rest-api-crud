@@ -1,6 +1,7 @@
 package org.ilia.restapicrud.service;
 
 import lombok.RequiredArgsConstructor;
+import org.ilia.restapicrud.dto.BirthDateRange;
 import org.ilia.restapicrud.dto.UserDto;
 import org.ilia.restapicrud.entity.User;
 import org.ilia.restapicrud.enums.UpdateType;
@@ -22,6 +23,12 @@ public class UserService {
 
     public List<UserDto> findAll() {
         return userRepository.findAll().stream()
+                .map(userMapper::toUserDto)
+                .toList();
+    }
+
+    public List<UserDto> findByBirthDateRange(BirthDateRange birthDateRange) {
+        return userRepository.findByBirthDateAfterAndBirthDateBefore(birthDateRange.getFrom(), birthDateRange.getTo()).stream()
                 .map(userMapper::toUserDto)
                 .toList();
     }

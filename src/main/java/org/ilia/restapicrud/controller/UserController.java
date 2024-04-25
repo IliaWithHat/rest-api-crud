@@ -1,6 +1,7 @@
 package org.ilia.restapicrud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.ilia.restapicrud.dto.BirthDateRange;
 import org.ilia.restapicrud.dto.UserDto;
 import org.ilia.restapicrud.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,11 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping("/birthDateRange")
+    public List<UserDto> findByBirthDateRange(@Validated BirthDateRange birthDateRange) {
+        return userService.findByBirthDateRange(birthDateRange);
+    }
+
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable Integer id) {
         return userService.findById(id)
@@ -39,13 +45,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDto fullUpdate(@RequestBody @Validated UserDto userDto, @PathVariable Integer id) {
+    public UserDto fullUpdate(@PathVariable Integer id, @RequestBody @Validated UserDto userDto) {
         return userService.update(id, userDto, FULL_UPDATE)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PatchMapping("/{id}")
-    public UserDto partialUpdate(@RequestBody @Validated UserDto userDto, @PathVariable Integer id) {
+    public UserDto partialUpdate(@PathVariable Integer id, @RequestBody UserDto userDto) {
         return userService.update(id, userDto, PARTIAL_UPDATE)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
