@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface BirthDateRangeConstraint {
 
-    String message() default "\"from\" date must be before \"to\" date";
+    String message() default "'from' date must be before 'to' date";
 
     Class<?>[] groups() default {};
 

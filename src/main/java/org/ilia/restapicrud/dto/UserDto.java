@@ -27,7 +27,7 @@ public class UserDto {
     String lastName;
 
     @NotNull(message = "Enter birth date")
-    @Past(message = "Birth date cannot be past")
+    @Past(message = "You cannot birth in future")
     @MinimumAge
     LocalDate birthDate;
 
