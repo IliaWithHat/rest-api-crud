@@ -21,6 +21,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             String errorMessage = error.getMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<>(new ApiError(HttpStatus.BAD_REQUEST, errors), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ApiError(HttpStatus.BAD_REQUEST.value(), errors), HttpStatus.BAD_REQUEST);
     }
 }
