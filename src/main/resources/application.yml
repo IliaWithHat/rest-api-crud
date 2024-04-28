@@ -5,6 +5,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/user_repository
   application:
     name: rest-api-crud
+  jpa:
+    open-in-view: false
 
 user:
   minimum-age: 12

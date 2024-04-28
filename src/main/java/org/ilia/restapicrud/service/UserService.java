@@ -9,6 +9,7 @@ import org.ilia.restapicrud.mapper.UserMapper;
 import org.ilia.restapicrud.repository.UserRepository;
 import org.ilia.restapicrud.validation.ValidateObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static org.ilia.restapicrud.enums.UpdateType.FULL_UPDATE;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
