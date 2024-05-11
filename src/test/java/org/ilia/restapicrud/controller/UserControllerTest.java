@@ -59,9 +59,7 @@ class UserControllerTest {
         BirthDateRange birthDateRange = new BirthDateRange(LocalDate.of(2000, 1, 1), LocalDate.of(2001, 1, 1));
         given(userService.findByBirthDateRange(birthDateRange)).willReturn(allUsers);
 
-        mockMvc.perform(get("/api/v1/users/birthDateRange")
-                        .param("from", "2000-01-01")
-                        .param("to", "2001-01-01"))
+        mockMvc.perform(get("/api/v1/users?from=2000-01-01&to=2001-01-01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].email", is(user.getEmail())));
@@ -72,9 +70,7 @@ class UserControllerTest {
         BirthDateRange birthDateRange = new BirthDateRange(LocalDate.of(2005, 1, 1), LocalDate.of(2006, 1, 1));
         given(userService.findByBirthDateRange(birthDateRange)).willReturn(List.of());
 
-        mockMvc.perform(get("/api/v1/users/birthDateRange")
-                        .param("from", "2005-01-01")
-                        .param("to", "2006-01-01"))
+        mockMvc.perform(get("/api/v1/users?from=2005-01-01&to=2006-01-01"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", empty()));
     }
