@@ -24,14 +24,12 @@ public class UserController {
     private final ValidateObject validateObject;
 
     @GetMapping
-    public List<UserDto> findAll() {
+    public List<UserDto> findAll(BirthDateRange birthDateRange) {
+        if (!birthDateRange.equals(new BirthDateRange(null, null))) {
+            validateObject.validate(birthDateRange);
+            return userService.findByBirthDateRange(birthDateRange);
+        }
         return userService.findAll();
-    }
-
-    @GetMapping("/birthDateRange")
-    public List<UserDto> findByBirthDateRange(BirthDateRange birthDateRange) {
-        validateObject.validate(birthDateRange);
-        return userService.findByBirthDateRange(birthDateRange);
     }
 
     @GetMapping("/{id}")
